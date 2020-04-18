@@ -1,0 +1,91 @@
+<template>
+  <div class="page no-toolbar no-navbar no-swipeback login-screen-page">
+    <div class="page-content login-screen-content">
+      <div class="block" style="margin-top: 40px; margin-bottom: 40px;">
+        <img class="center" src="./img/logo/loginLogo.png" style="display: block; width: 80%; margin-left: auto; margin-right: auto;" />
+      </div>
+      <form>
+        <div class="list" style="margin-bottom: 30px;">
+          <ul>
+            <li class="item-content item-input item-input-with-value">
+              <div class="item-inner">
+                <div class="item-title item-label">Email Id</div>
+                <div class="item-input-wrap">
+                  <input type="email" placeholder="Your Email Id" id="username" class="input-with-value" />
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Password</div>
+                <div class="item-input-wrap">
+                  <input type="password" placeholder="Your password" id="password" class="" />
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="list">
+          <ul>
+            <li>
+              <div class="block">
+              <a href="#" class="button button-fill" @click="signIn">Sign In</a></li>
+          </ul>
+          <ul>
+            <li>
+              <div class="block">
+                <a href="/register/" class="button button-fill">Sign Up</a></li>
+              </div>
+
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+<script>
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      //app.router.back();
+      //app.router.back();
+    } else {
+    }
+  });
+
+  return {
+    methods: {
+      signIn: function () {
+        var $ = this.$;
+        var app = this.$app;
+        var router = this.$router;
+        var username = $("input#username").val();
+        var password = $("input#password").val();
+        var message = "";
+
+        const auth = firebase.auth();
+        const promise = auth.signInWithEmailAndPassword(username, password);
+        promise.catch((e) =>
+        {
+           app.dialog.alert("Login failed", function () {
+              app.loginScreen.close();
+            });
+        } );
+
+        //var element = document.getElementById("welcome_user");
+        //element.innerHTML = "Welcome " + username + "!";
+
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            app.dialog.alert("Logged in successfully", function () {
+              app.loginScreen.close();
+              router.back();
+            });
+          } else {
+           
+          }
+        });
+      },
+    },
+  };
+</script>

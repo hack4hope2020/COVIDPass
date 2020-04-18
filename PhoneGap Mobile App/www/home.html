@@ -1,0 +1,113 @@
+<div class="page" data-name="home" id="home_page" style="opacity: 0;">
+  <div class="panel panel-left panel-cover panel-resizable panel-init">
+    <div class="page">
+      <div class="page-content">
+        <div class="block-title">Navigation Drawer</div>
+        <div class="block">
+          <p>
+            Select a Page
+          </p>
+        </div>
+        <div class="block-title">Pages</div>
+        <div class="list links-list">
+          <ul>
+            <li>
+              <a href="/login/" class="panel-close" onclick="logout()">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar navbar-large navbar-transparent">
+    <div class="navbar-bg"></div>
+    <div class="navbar-inner">
+      <div class="left">
+        <a href="#" class="link icon-only panel-open" data-panel="left">
+          <i class="icon f7-icons if-not-md">menu</i>
+        </a>
+      </div>
+      <div class="title sliding">COVIDPass</div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="block block-strong text-align-center" style="font-size: 20px;" id="welcome_user">
+      <p></p>
+    </div>
+
+    <div class="block text-align-center">
+      <div class="col text-align-center" style="width: 100%; padding: 5px;">
+        <div class="gauge selfScore"></div>
+      </div>
+
+      <div class="row block block-strong">
+        <p class="col" id="passText"></p>
+        <!-- <button
+          class="col button button-fill"
+          id="passButton"
+          style="width: 20%; margin-left: auto; margin-right: auto; margin-top: 5px; margin-bottom: auto; opacity: 0;"
+          onclick="clickPass()"
+        >
+          Pass
+          <img src="./img/qr.png" style="max-width: 50%; margin-top: 5px;" />
+        </button> -->
+      </div>
+
+      <div class="card" id="passCard" style="color: white; opacity: 0;" onclick="clickPass()">
+        <div class="row card-header">
+          <img class="col" src="./img/logo/transparentLogo.png" style="width: 15%; margin-top: 5px;" />
+          <p class="col" style="font-family: sans-serif; text-align: left; width: 83%;">COVIDPass</p>
+        </div>
+        <div class="card-content card-content-padding">
+          <div class="list simple-list">
+            <ul style="font-size: 14px; margin-bottom: 12px;">
+              <li>
+                <p style="font-size: 22px; font-family: 'Courier New', Courier, monospace; text-align: center;">5543 5432 9210 8755</p>
+              </li>
+
+              <li>
+                <div style="font-size: 12px; font-family: sans-serif;">
+                  <div class="row">
+                    <p class="col" style="width: 70%; text-align: left;">Tap for more details</p>
+                    <img class="col" src="./img/qr.png" style="max-width: 10%; margin-top: 20px;" />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Suggestion</div>
+        <div class="list simple-list">
+          <ul style="font-size: 14px; margin-bottom: 12px;">
+            <li id="suggestion">Please consult with one of our doctors</li>
+          </ul>
+        </div>
+        <div class="list links-list" ;>
+          <ul>
+            <li id="chatSug">
+              <a href="/telemed/" class="item-link">
+                <div class="item-content">
+                  <div class="item-media"><i class="icon material-icons md-only color-black">sms</i></div>
+                  <div class="item-title">Chat with a Doctor</div>
+                </div>
+              </a>
+            </li>
+            <li style="height: 0; opacity: 0;" id="testCenterSug">
+              <a href="/centers/" class="item-link">
+                <div class="item-content">
+                  <div class="item-media"><i class="icon material-icons md-only color-black">local_hospital</i></div>
+                  <div class="item-title">Nearby Test Centers</div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

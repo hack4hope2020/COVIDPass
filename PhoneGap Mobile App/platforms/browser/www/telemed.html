@@ -1,0 +1,332 @@
+<template>
+  <div class="page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+          </a>
+        </div>
+        <div class="title">Telemed</div>
+      </div>
+    </div>
+    <div class="toolbar messagebar" @messagebar:attachmentdelete="deleteAttachment">
+      <a class="button button-fill" @click="sendSymptoms" id="sendSymptomButton">Send your Symptoms</a>
+
+      <div class="toolbar-inner">
+        <a class="link icon-only" @click="sheetToggle">
+          <i class="icon f7-icons if-not-md" id="chat_icon">camera_fill</i>
+        </a>
+        <div class="messagebar-area">
+          <textarea class="resizable" placeholder="Message"></textarea>
+        </div>
+        <a class="link icon-only demo-send-message-link" id="chat_icon" @click="sendMessage">
+          <i class="icon f7-icons if-not-md">arrow_up_circle_fill</i>
+        </a>
+      </div>
+
+      <div class="messagebar-sheet">
+        {{#each images}}
+        <label class="checkbox messagebar-sheet-image" style="background-image:url({{this}})" @change="handleAttachment">
+          <input type="checkbox" />
+          <i class="icon icon-checkbox"></i>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+    <div class="page-content messages-content">
+      <div class="messages"></div>
+    </div>
+  </div>
+</template>
+<script>
+  return {
+    data: function () {
+      return {
+        images: [
+          "https://cdn.framework7.io/placeholder/cats-300x300-1.jpg",
+          "https://cdn.framework7.io/placeholder/cats-200x300-2.jpg",
+          "https://cdn.framework7.io/placeholder/cats-400x300-3.jpg",
+          "https://cdn.framework7.io/placeholder/cats-300x150-4.jpg",
+          "https://cdn.framework7.io/placeholder/cats-150x300-5.jpg",
+          "https://cdn.framework7.io/placeholder/cats-300x300-6.jpg",
+          "https://cdn.framework7.io/placeholder/cats-300x300-7.jpg",
+          "https://cdn.framework7.io/placeholder/cats-200x300-8.jpg",
+          "https://cdn.framework7.io/placeholder/cats-400x300-9.jpg",
+          "https://cdn.framework7.io/placeholder/cats-300x150-10.jpg",
+        ],
+        people: [
+          {
+            name: "Doctor",
+          },
+        ],
+        answers: [
+          "Good to meet you! Thank you for your Report. I will review it and get back to you soon!",
+          "There is a high chance of you having contracted COVID-19. I have assigned you a Red Pass. Please visit your nearest test center as soon as possible and get yourself tested!",
+        ],
+        responseInProgress: false,
+      };
+    },
+    methods: {
+      sheetToggle: function () {
+        var self = this;
+        self.messagebar.sheetToggle();
+      },
+      deleteAttachment: function (e, index) {
+        var self = this;
+        var image = self.messagebar.attachments.splice(index, 1)[0];
+        self.messagebar.renderAttachments();
+        self.checkAttachments();
+        // Uncheck in sheet
+        var imageIndex = self.images.indexOf(image);
+        self.$el.find(".messagebar-sheet .checkbox").eq(imageIndex).find("input").prop("checked", false);
+      },
+      handleAttachment: function (e) {
+        var self = this;
+        var $$ = self.$$;
+        var index = $(e.target).parents("label.checkbox").index();
+        var image = self.images[index];
+        if (e.target.checked) {
+          // Add to attachments
+          self.messagebar.attachments.unshift(image);
+        } else {
+          // Remove from attachments
+          self.messagebar.attachments.splice(self.messagebar.attachments.indexOf(image), 1);
+        }
+        self.messagebar.renderAttachments();
+        self.checkAttachments();
+      },
+      checkAttachments: function () {
+        var self = this;
+        if (self.messagebar.attachments.length > 0) {
+          self.messagebar.attachmentsShow();
+          self.messagebar.setPlaceholder("Add comment or Send");
+        } else {
+          self.messagebar.attachmentsHide();
+          self.messagebar.setPlaceholder("Message");
+        }
+      },
+      sendMessage: function () {
+        var self = this;
+        var text = self.messagebar.getValue().replace(/\n/g, "<br>").trim();
+        var messagesToSend = [];
+        if (text.trim().length) {
+          messagesToSend.push({
+            text: text,
+            header: "Patient",
+          });
+        }
+        // Reset attachments
+        self.messagebar.attachments = [];
+
+        var passText = document.getElementById("passText");
+        var suggestion = document.getElementById("suggestion");
+        var chatSug = document.getElementById("chatSug");
+        var testCenterSug = document.getElementById("testCenterSug");
+
+        passText.textContent = "You have a high probability of having contracted COVID-19";
+        suggestion.textContent = "Visit your nearest Test Center immediately";
+        chatSug.style.opacity = 0;
+        chatSug.style.height = 0;
+
+        var updates = {};
+        updates["/users/" + loggedInUserNumber + "/passColor"] = "red";
+        updates["/users/" + loggedInUserNumber + "/riskMessage"] = "You have a very high risk of having contracted COVID-19";
+
+        firebase.database().ref().update(updates);
+
+        testCenterSug.style.opacity = 1;
+        testCenterSug.style.height = "100%";
+
+        selfScoreGauge.update({
+          borderColor: "#e74c3c",
+          valueTextColor: "#e74c3c",
+        });
+
+        // Clear area
+        self.messagebar.clear();
+        // Focus area
+        if (text.length) self.messagebar.focus();
+        // Send message
+        self.messages.addMessages(messagesToSend);
+
+        // Mock response
+        if (self.responseInProgress) return;
+        self.responseInProgress = true;
+        setTimeout(function () {
+          var answer = self.answers[1];
+          var person = self.people[Math.floor(Math.random() * self.people.length)];
+          self.messages.showTyping({
+            header: person.name + " is typing",
+          });
+          setTimeout(function () {
+            self.messages.addMessage({
+              text: answer,
+              type: "received",
+              name: person.name,
+            });
+            self.messages.hideTyping();
+            self.responseInProgress = false;
+          }, 4000);
+        }, 1000);
+      },
+      sendSymptoms: function () {
+        var self = this;
+        let age = loggedInUser.age;
+        let gender = loggedInUser.gender;
+        let name = loggedInUser.firstName + " " + loggedInUser.lastName;
+
+        var text =
+          "Hello Doctor. My name is " +
+          loggedInUser.firstName +
+          ". Please find my symptoms below: <br><br><b>Name:</b>" +
+          name +
+          " <br><b>Age:</b> " +
+          age +
+          "<br><b>Gender:</b> " +
+          gender +
+          "<br><br><b>Symptoms:</b>";
+
+        let index = 1;
+        for (let key in loggedInUser.symptoms) {
+          if (loggedInUser.symptoms[key] == 1) {
+            text += "<br>" + index + ") " + getValue(key);
+            ++index;
+          }
+        }
+        index = 1;
+
+        text += "<br><br><b>Past Illnesses:</b>";
+
+        for (let key in loggedInUser.riskFactor) {
+          if (loggedInUser.riskFactor[key] == 1) {
+            text += "<br>" + index + ") " + getValue(key);
+            ++index;
+          }
+        }
+
+        document.getElementById("sendSymptomButton").style.height = 0;
+
+        function getValue(key) {
+          let value = "";
+          switch (key) {
+            case "breathShortness":
+              value = "Shortness of Breath";
+              break;
+            case "fatigue":
+              value = "Fatigue";
+              break;
+            case "bodyChills":
+              value = "Chills and Body Ache";
+              break;
+            case "fever":
+              value = "Fever";
+              break;
+            case "cough":
+              value = "Cough";
+              break;
+            case "sputum":
+              value = "Sputum";
+              break;
+            case "soreThroat":
+              value = "Sore Throat";
+              break;
+            case "headAche":
+              value = "Headache";
+              break;
+            case "stomachPain":
+              value = "Stomach Pain";
+              break;
+            case "tasteLoss":
+              value = "Loss of Taste/Smell";
+              break;
+            case "runnyNose":
+              value = "Runny Nose/Sneezing";
+              break;
+            case "compromisedImmunity":
+              value = "Compromised Immune System";
+              break;
+            case "heartDisease":
+              value = "Heart Disease";
+              break;
+            case "lungDisease":
+              value = "Chronic Lung Disease";
+              break;
+            case "diabetes":
+              value = "Diabetes";
+              break;
+          }
+          return value;
+        }
+
+        var messagesToSend = [];
+
+        if (text.trim().length) {
+          messagesToSend.push({
+            text: text,
+            header: "Patient",
+          });
+        }
+        // Clear area
+        self.messagebar.clear();
+        // Focus area
+        if (text.length) self.messagebar.focus();
+        // Send message
+        self.messages.addMessages(messagesToSend);
+
+        // Mock response
+        if (self.responseInProgress) return;
+        self.responseInProgress = true;
+        setTimeout(function () {
+          var answer = self.answers[0];
+          var person = self.people[Math.floor(Math.random() * self.people.length)];
+          self.messages.showTyping({
+            header: person.name + " is typing",
+          });
+          setTimeout(function () {
+            self.messages.addMessage({
+              text: answer,
+              type: "received",
+              name: person.name,
+            });
+            self.messages.hideTyping();
+            self.responseInProgress = false;
+          }, 4000);
+        }, 1000);
+      },
+    },
+    on: {
+      pageBeforeRemove: function (e, page) {
+        var self = this;
+        if (self.messagebar) self.messagebar.destroy();
+      },
+      pageInit: function (e, page) {
+        var self = this;
+        var app = self.$app;
+        self.messagebar = app.messagebar.create({
+          el: page.$el.find(".messagebar"),
+          attachments: [],
+        });
+        self.messages = app.messages.create({
+          el: page.$el.find(".messages"),
+          firstMessageRule: function (message, previousMessage, nextMessage) {
+            if (message.isTitle) return false;
+            if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
+            return false;
+          },
+          lastMessageRule: function (message, previousMessage, nextMessage) {
+            if (message.isTitle) return false;
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          },
+          tailMessageRule: function (message, previousMessage, nextMessage) {
+            if (message.isTitle) return false;
+            if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+            return false;
+          },
+        });
+      },
+    },
+  };
+</script>

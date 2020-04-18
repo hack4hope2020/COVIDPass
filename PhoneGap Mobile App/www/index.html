@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#2196f3" />
+    <title>App</title>
+    <link rel="stylesheet" href="lib/framework7/css/framework7.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="apple-touch-icon" href="img/f7-icon-square.png" />
+    <link rel="icon" href="img/f7-icon.png" />
+  </head>
+
+  <body class="color-theme-black">
+    <div id="app">
+      <div class="view view-main"></div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+
+      var firebaseConfig = {
+        apiKey: "AIzaSyDmtE7PQCuM-mK1ZimIY7BcQLx5XrNIuiM",
+        authDomain: "hack4hope-318b7.firebaseapp.com",
+        databaseURL: "https://hack4hope-318b7.firebaseio.com",
+        projectId: "hack4hope-318b7",
+        storageBucket: "hack4hope-318b7.appspot.com",
+        messagingSenderId: "84886571053",
+        appId: "1:84886571053:web:6e8ab5070157339d8250a4",
+        measurementId: "G-XWTSXNJENS",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/routes.js"></script>
+    <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+  </body>
+</html>

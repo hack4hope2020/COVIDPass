@@ -1,0 +1,97 @@
+<div class="page">
+  <div class="navbar">
+    <div class="navbar-bg"></div>
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back">
+          <i class="icon icon-back"></i>
+        </a>
+      </div>
+      <div class="title">Contact Tracing</div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="swiper-container swiper-init demo-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="list no-hairlines-md">
+            <ul>
+              <!-- <a href="/" class="button button-fill external" onclick="onClick()">Test</a> -->
+
+              <li style="position: relative;">
+                <img src="./img/mobility/location.png" style="display: block; width: 60%; margin-left: auto; margin-right: auto;" id="imagetest" />
+              </li>
+
+              <li class="item-content item-input">
+                <div class="item-inner" style="text-align: center;">
+                  <p>
+                    Help us understand where you have been in the last 2 weeks. We will check whether you have been exposed to any crowded hotspots!
+                  </p>
+
+                  <button href="#" class="button button-fill" onclick="googleTakeout()">Give Access to Location History</button>
+                </div>
+              </li>
+              <div class="block-title" style="text-align: center;">Swipe to continue</div>
+            </ul>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="list no-hairlines-md">
+            <div class="block">
+              <ul>
+                <li style="position: relative;">
+                  <img src="./img/mobility/refer.png" style="display: block; width: 60%; margin-left: auto; margin-right: auto;" id="imagetest" />
+                </li>
+
+                <li class="item-content item-input" style="text-align: center;">
+                  <p>
+                    Add the phone numbers of the 3 people you have most frequently come in contact with. We will check if you and them have contacted
+                    anyone tested positive!
+                  </p>
+                </li>
+
+                <div id="referralNew" style="opacity: 1;"></div>
+
+                <div class="block">
+                  <button class="button button-fill" onclick="openContacts()">Add</button>
+                </div>
+
+                <div class="block-title" style="text-align: center;">Swipe to Skip/Continue</div>
+
+                <!-- <a href="#" class="button button-fill">Add contacts</a> -->
+                <!-- <div class="block"> -->
+                <!-- <button class="button button-fill" onclick="register()">Register</button> -->
+                <!-- </div> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="list no-hairlines-md">
+            <div class="block">
+              <div class="block">
+                <ul>
+                  <li style="position: relative;">
+                    <img src="./img/goCorona.png" style="display: block; width: 60%; margin-left: auto; margin-right: auto;" id="imagetest" />
+                  </li>
+
+                  <li class="item-content item-input">
+                    <div class="item-inner" style="text-align: center;">
+                      <p>You're all set! Click Register to complete the Registration process</p>
+                    </div>
+                  </li>
+
+                  <div class="block">
+                    <button class="button button-fill" onclick="register()">Register</button>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
